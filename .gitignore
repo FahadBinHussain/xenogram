@@ -1,7 +1,6 @@
 .next
 node_modules
 .env
-
-tsconfig.tsbuildinfo
-
 .env*
+.vercel
+tsconfig.tsbuildinfo
