@@ -40,8 +40,8 @@ export const useGSAP = ({
   const animationRef = useRef<gsap.core.Tween | gsap.core.Timeline | null>(null);
 
   // Helper to create the animation based on type
-  const createAnimation = (element: HTMLElement) => {
-    let anim;
+  const createAnimation = (element: HTMLElement): gsap.core.Tween | null => {
+    let anim: gsap.core.Tween | null = null;
     
     const getBasicProps = (overrides = {}) => ({
       duration,
@@ -181,7 +181,8 @@ export const useGSAP = ({
         }
       } else {
         // Create standard animation with optional scroll trigger
-        animationRef.current = createAnimation(elementRef.current);
+        const el = elementRef.current;
+        animationRef.current = el ? createAnimation(el) : null;
         
         if (trigger && animationRef.current) {
           // Manually trigger animation on scroll if trigger is provided

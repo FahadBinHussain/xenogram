@@ -2,9 +2,9 @@
 
 import { signIn, useSession } from 'next-auth/react'
 import { redirect, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 
-export default function SignInPage() {
+function SignInForm() {
   const { data: session, status } = useSession()
   const searchParams = useSearchParams()
   const [authError, setAuthError] = useState<string | null>(null)
@@ -62,4 +62,14 @@ export default function SignInPage() {
       </div>
     </div>
   )
-} 
+}
+
+// Next 15 requires useSearchParams() to sit inside a Suspense boundary,
+// otherwise static prerendering of /auth/signin fails.
+export default function SignInPage() {
+  return (
+    <Suspense fallback={<p className="p-8 text-center text-gray-500">Loading...</p>}>
+      <SignInForm />
+    </Suspense>
+  )
+}

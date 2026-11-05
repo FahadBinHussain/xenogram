@@ -10,7 +10,7 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { getServerSession } from "next-auth";
+import { getServerSession, type Session } from "next-auth";
 import { authOptions } from "@/server/auth";
 import { prisma } from "@/server/db";
 
@@ -23,7 +23,7 @@ import { prisma } from "@/server/db";
  */
 
 interface CreateContextOptions {
-  session: Awaited<ReturnType<typeof getServerSession>> | null;
+  session: Session | null;
 }
 
 /**

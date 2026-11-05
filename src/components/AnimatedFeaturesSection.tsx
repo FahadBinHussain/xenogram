@@ -16,24 +16,29 @@ export default function AnimatedFeaturesSection() {
   const featuresRef = useRef<HTMLDivElement>(null)
   
   useEffect(() => {
-    if (!sectionRef.current || !headingRef.current || !featuresRef.current) return
-    
+    // Capture refs into locals: narrowing on `ref.current` does not survive
+    // into the gsap.context callback (mutable property), which is a TS error.
+    const section = sectionRef.current
+    const heading = headingRef.current
+    const features = featuresRef.current
+    if (!section || !heading || !features) return
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: sectionRef.current,
+          trigger: section,
           start: 'top 80%',
         }
       })
       
       // Animate heading
-      tl.fromTo(headingRef.current, 
+      tl.fromTo(heading, 
         { opacity: 0, y: 30 }, 
         { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }
       )
       
       // Animate feature cards in staggered fashion
-      const featureCards = featuresRef.current.children
+      const featureCards = features.children
       tl.fromTo(featureCards, 
         { opacity: 0, y: 50 }, 
         { 
@@ -45,7 +50,7 @@ export default function AnimatedFeaturesSection() {
         }, 
         '-=0.4' // Start slightly before the heading animation finishes
       )
-    })
+    }, section)
     
     return () => ctx.revert()
   }, [])
