@@ -11,7 +11,7 @@ It is live now as **Xenotree**: https://xenotree.vercel.app
 | app | Vercel project `xenotree`, id `prj_PI46XYVVIAegNA5QVYknWpoxWkqP` | team `team_gppoFTJOL6naEWSA2YsbUCxu` (Fahad's projects), account `fahadbinhussain001@gmail.com` |
 | db | Neon project `xenotree`, id `weathered-credit-35174466` | region `aws-ap-southeast-1` (closest to Dhaka), pg 18, endpoint `ep-aged-violet-az456taz` |
 | auth | GCP project `xenogram` (number `728656376284`) | OAuth client `Xenotree`, id `728656376284-8jfpu6cejea89unitlffusih4ek8q0ks.apps.googleusercontent.com` |
-| secrets | Bitwarden item `github.com/FahadBinHussain/xenogram / .env (production)` | env vars also live in the Vercel project |
+| secrets | Bitwarden item `github.com/FahadBinHussain/xenogram / .env (production)` | env vars also live in the Vercel project; a `(development)` item holds the localhost variant |
 
 The old `Xenogram` OAuth client (created 2025-05-12) was **deleted** on 2026-11-05 —
 it only had localhost redirect URIs and was about to be auto-deleted by Google for
@@ -89,3 +89,18 @@ npm run dev
 ```
 
 `npx prisma generate` runs automatically on `npm install` via `postinstall`.
+
+## restoring the env after a fresh clone
+
+`.env` / `.env.local` are gitignored, so a new clone has no env. Both variants are in
+the Bitwarden vault and come back with one command:
+
+```powershell
+& pwsh -NoProfile -ExecutionPolicy Bypass -File C:\Users\Admin\Downloads\automata-private\bitwarden.com\env-sync.ps1 -Repo xenogram
+```
+
+`-Repo` matches the **git remote**, not the folder name. `-Env dev` (default) writes the
+localhost variant, `-Env prod` writes the production one — both land on `.env.local`, so
+re-run the variant you want after switching. `.vercel/` comes back from `vercel link`
+with the ids in the table above. The OAuth client secret is only in the vault and in
+the Vercel project env; never commit it here.
